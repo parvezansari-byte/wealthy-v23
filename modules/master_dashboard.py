@@ -1,110 +1,105 @@
 import streamlit as st
-import sqlite3
 import pandas as pd
 import plotly.express as px
-
-conn = sqlite3.connect("wealthy.db", check_same_thread=False)
 
 def master_dashboard():
     st.title("🧠 Advisor 360° Dashboard")
 
-    # =========================
-    # CLIENT SELECT
-    # =========================
-    clients = conn.execute("SELECT * FROM clients").fetchall()
-
-    if not clients:
-        st.warning("No clients available")
-        return
-
-    names = [f"{c[0]} - {c[1]}" for c in clients]
-    selected = st.selectbox("Select Client", names)
-    client_id = int(selected.split(" - ")[0])
-
     st.divider()
 
     # =========================
-    # NET WORTH (STATIC INPUT FOR NOW)
+    # NET WORTH
     # =========================
-    st.subheader("📊 Net Worth Snapshot")
+    st.subheader("📊 Net Worth")
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
+    assets = col1.number_input("Assets (₹)", value=2000000)
+    liabilities = col2.number_input("Liabilities (₹)", value=800000)
 
-    assets = st.number_input("Total Assets (₹)", value=2000000)
-    liabilities = st.number_input("Total Liabilities (₹)", value=800000)
-    net_worth = assets - liabilities
+    networth = assets - liabilities
 
-    col1.metric("Assets", f"₹{assets:,.0f}")
-    col2.metric("Liabilities", f"₹{liabilities:,.0f}")
-    col3.metric("Net Worth", f"₹{net_worth:,.0f}")
+    st.metric("Net Worth", f"₹{networth:,.0f}")
+
+    fig = px.pie(
+        names=["Assets", "Liabilities"],
+        values=[assets, liabilities],
+        title="Net Worth Split"
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
 
     # =========================
     # CASHFLOW
     # =========================
-    st.subheader("💰 Cashflow Snapshot")
-
-    income = st.number_input("Monthly Income (₹)", value=100000)
-    expense = st.number_input("Monthly Expense (₹)", value=70000)
-
-    surplus = income - expense
+    st.subheader("💰 Cashflow")
 
     col1, col2, col3 = st.columns(3)
+    income = col1.number_input("Income", value=100000)
+    expense = col2.number_input("Expense", value=50000)
+    sip = col3.number_input("SIP", value=10000)
 
-    col1.metric("Income", f"₹{income:,.0f}")
-    col2.metric("Expense", f"₹{expense:,.0f}")
-    col3.metric("Surplus", f"₹{surplus:,.0f}")
+    emi = st.number_input("EMI", value=8000)
+
+    outflow = expense + sip + emi
+    surplus = income - outflow
+
+    st.metric("Surplus", f"₹{surplus:,.0f}")
+
+    fig = px.bar(
+        x=["Income", "Expense", "SIP", "EMI"],
+        y=[income, expense, sip, emi],
+        title="Cashflow Breakdown"
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
 
     # =========================
     # GOALS
     # =========================
-    st.subheader("🎯 Client Goals")
+    st.subheader("🎯 Goals")
 
-    goals = conn.execute(
-        "SELECT goal_name, target_amount, years FROM goals WHERE client_id=?",
-        (client_id,)
-    ).fetchall()
+    goal1 = st.number_input("Goal 1", value=1000000)
+    goal2 = st.number_input("Goal 2", value=500000)
+    goal3 = st.number_input("Goal 3", value=0)
 
-    if goals:
-        for g in goals:
-            st.write(f"🎯 {g[0]} → ₹{g[1]:,.0f} in {g[2]} yrs")
-    else:
-        st.info("No goals added")
+    total_goal = goal1 + goal2 + goal3
+
+    st.metric("Total Goals", f"₹{total_goal:,.0f}")
+
+    fig = px.bar(
+        x=["Goal 1", "Goal 2", "Goal 3"],
+        y=[goal1, goal2, goal3],
+        title="Goal Distribution"
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
 
     # =========================
-    # SIMPLE PROJECTION CHART
+    # PROJECTION
     # =========================
-    st.subheader("📈 Wealth Projection")
+    st.subheader("📈 Projection")
 
     years = list(range(1, 11))
-    values = [net_worth * (1.1 ** y) for y in years]
+    values = [networth * (1.1 ** y) for y in years]
 
     df = pd.DataFrame({"Year": years, "Value": values})
-
-    fig = px.line(df, x="Year", y="Value", title="Projected Net Worth (10%)")
+    fig = px.line(df, x="Year", y="Value", title="Growth @10%")
 
     st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
 
     # =========================
-    # ADVISOR INSIGHTS
+    # INSIGHTS
     # =========================
     st.subheader("🧠 Advisor Insights")
 
     if surplus <= 0:
-        st.error("Client has negative cashflow — fix before investing")
+        st.error("Negative cashflow")
     elif surplus < income * 0.2:
-        st.warning("Low savings rate — increase SIP capacity")
+        st.warning("Low savings")
     else:
-        st.success("Healthy financial position")
-
-    if liabilities > assets * 0.6:
-        st.warning("High debt ratio")
-    else:
-        st.success("Debt under control")
+        st.success("Healthy financials")
