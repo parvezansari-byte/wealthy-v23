@@ -3,6 +3,7 @@ from modules.dashboard import show_dashboard
 from modules.crm import client_onboarding
 from modules.investments import sip_calculator
 from modules.pdf_report import pdf_report
+from modules.investment_dashboard import investment_dashboard
 
 st.markdown("""
 <style>
