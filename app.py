@@ -11,6 +11,7 @@ from modules.investment_dashboard import investment_dashboard
 from modules.pdf_report import pdf_report
 from modules.financial_planner import financial_planner
 from modules.goal_planner import goal_planner
+from modules.cashflow import cashflow_planner
 
 # =========================
 # PAGE CONFIG
@@ -60,6 +61,7 @@ page = st.sidebar.selectbox(
         "PDF Report",
         "Financial Planner",
         "Goal Planner",
+        "Cashflow Analysis",
     ]
 )
 
@@ -87,6 +89,8 @@ elif page == "Financial Planner":
     financial_planner()
 elif page == "Goal Planner":
     goal_planner()
+elif page == "Cashflow Analysis":
+    cashflow_planner()
 
 # =========================
 # DEBUG (REMOVE LATER)
