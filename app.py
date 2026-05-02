@@ -14,7 +14,7 @@ from modules.goal_planner import goal_planner
 from modules.cashflow import cashflow_planner
 from modules.networth import networth_tracker
 from modules.master_dashboard import master_dashboard
-
+from modules.advisor_report import advisor_report
 # =========================
 # PAGE CONFIG
 # =========================
@@ -66,6 +66,7 @@ page = st.sidebar.selectbox(
         "Cashflow Analysis",
         "Net Worth",
         "Advisor Dashboard",
+        "Advisor Report",
     ]
 )
 
@@ -99,6 +100,8 @@ elif page == "Net Worth":
     networth_tracker()
 elif page == "Advisor Dashboard":
     master_dashboard()
+elif page == "Advisor Report":
+    advisor_report()
 
 # =========================
 # DEBUG (REMOVE LATER)
