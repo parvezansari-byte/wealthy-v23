@@ -57,5 +57,41 @@ def sip_calculator():
         yaxis_title="Amount (₹)",
         template="plotly_dark"
     )
+    # 📊 Year-wise data
+values = []
+invested_values = []
+
+for y in range(1, int(years) + 1):
+    val = future_value_sip(sip, rate, y)
+    values.append(val)
+    invested_values.append(sip * 12 * y)
+
+# 📊 Plotly chart
+import plotly.graph_objects as go
+
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(
+    x=list(range(1, int(years) + 1)),
+    y=values,
+    mode='lines+markers',
+    name='Portfolio Value'
+))
+
+fig.add_trace(go.Scatter(
+    x=list(range(1, int(years) + 1)),
+    y=invested_values,
+    mode='lines',
+    name='Invested Amount'
+))
+
+fig.update_layout(
+    title="Wealth Growth Over Time",
+    xaxis_title="Years",
+    yaxis_title="Amount (₹)",
+    template="plotly_dark"
+)
+
+st.plotly_chart(fig, use_container_width=True)
 
     st.plotly_chart(fig, use_container_width=True)
