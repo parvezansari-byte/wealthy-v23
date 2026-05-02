@@ -31,3 +31,9 @@ def show_dashboard():
 
     else:
         st.info("No data available yet")
+        st.markdown(f"""
+<div class="kpi-card">
+    <h3>Total Clients</h3>
+    <h1>{total_clients}</h1>
+</div>
+""", unsafe_allow_html=True)
