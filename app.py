@@ -2,7 +2,6 @@ import streamlit as st
 from modules.dashboard import show_dashboard
 from modules.investments import sip_calculator
 from modules.crm import client_onboarding
-from modules.ai import ai_summary
 
 st.set_page_config(page_title="Wealthy V23", layout="wide")
 
@@ -21,5 +20,4 @@ elif page == "Client Onboarding":
 
 elif page == "SIP Calculator":
     sip_calculator()
-elif page == "AI Summary":
-    ai_summary()
+
