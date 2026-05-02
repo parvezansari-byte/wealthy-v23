@@ -1,7 +1,7 @@
 from openai import OpenAI
 import os
 
-client = OpenAI(api_key=os.getenv("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"))
+client = OpenAI(api_key=os.getenv("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"))
 
 def generate_summary(name, age):
     prompt = f"""
