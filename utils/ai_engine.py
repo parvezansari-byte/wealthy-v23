@@ -11,7 +11,7 @@ def generate_summary(name, age):
     """
 
     response = client.chat.completions.create(
-        model="gpt-4o-mini",   # ✅ stable model
+        model="model="gpt-5.3",   # ✅ stable model
         messages=[
             {"role": "user", "content": prompt}
         ]
