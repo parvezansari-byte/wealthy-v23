@@ -21,5 +21,5 @@ elif page == "Client Onboarding":
 
 elif page == "SIP Calculator":
     sip_calculator()
-    elif page == "PDF Report":
+elif page == "PDF Report":
     pdf_report()
