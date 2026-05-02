@@ -9,6 +9,7 @@ from modules.client_profile import client_profile
 from modules.investments import sip_calculator
 from modules.investment_dashboard import investment_dashboard
 from modules.pdf_report import pdf_report
+from modules.financial_planner import financial_planner
 
 # =========================
 # PAGE CONFIG
@@ -56,6 +57,7 @@ page = st.sidebar.selectbox(
         "SIP Calculator",
         "Investment Dashboard",
         "PDF Report"
+        "Financial Planner",
     ]
 )
 
@@ -79,6 +81,8 @@ elif page == "Investment Dashboard":
 
 elif page == "PDF Report":
     pdf_report()
+elif page == "Financial Planner":
+    financial_planner()
 
 # =========================
 # DEBUG (REMOVE LATER)
