@@ -56,7 +56,7 @@ page = st.sidebar.selectbox(
         "Client Profile",
         "SIP Calculator",
         "Investment Dashboard",
-        "PDF Report"
+        "PDF Report",
         "Financial Planner",
     ]
 )
